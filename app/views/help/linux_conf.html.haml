@@ -1,0 +1,93 @@
+- bash_lexer = Pygments::Lexer[:bash]
+%h3 Linux installation &amp configuration
+%hr
+
+%ol.help
+  %li
+    %p
+      Add git-core and git-flow PPA repositories containing latest versions of the software and install them
+    .bash
+      %pre 
+        sudo add-apt-repository ppa:git-core/ppa
+        sudo add-apt-repository ppa:arnd-arndnet/git
+
+  %li
+    %p
+      Install git and git-flow (use only one of the options)
+    .bash
+      %pre 
+        sudo aptitude install git git-flow
+    .bash
+      %pre 
+        sudo apt-get install git git-flow
+
+  %li
+    %p
+      Install git-flow-completion
+    .bash
+      %pre 
+        reminder: test if it is installed with git-flow package
+
+  %li
+    %p
+      Configure your git environment user data
+    
+    .bash
+      %pre 
+        - setup_str = ["git config --global user.name \"#{current_user.name}\"", "git config --global user.email \"#{current_user.email}\""].join("\n")
+        #{setup_str}
+
+  %li
+    %p
+      %b OPTIONAL.
+      Add some alias to the most used commands
+    
+    .bash
+      %pre 
+        git config --global alias.st status
+        git config --global alias.co checkout
+        git config --global alias.br branch
+        git config --global alias.ci commit
+
+  %li
+    %p
+      %b RECOMMENDED.
+      When you are working with git using the linux terminal, it's very useful to know in which branch you really are. Add the content of
+      %a{:title=>".bashrc example file", :href=>"https://agostini.tlmat.unican.es/uploads/.bashrc"} this file
+      to your ~/.bashrc. This will also change the colors of your prompt, so if you are unhappy with them feel free to modify anything.
+
+  %li
+    %p
+      %b OPTIONAL.
+      Set the default editor for git (in this case Vim)
+    
+    .bash
+      %pre 
+        git config --global core.editor vim
+
+  %li
+    %p
+      %b RECOMMENDED.
+      If you want, you can install a GUI for managing a repository, and there are plenty of them for Linux, as well as for Windows and MacOS X. Our recomendation is to use
+      %a{:title=>"Git Client - SmartGit", :href=>"http://www.syntevo.com/smartgit/index.html"} SmartGit
+      client. Its main advantage is that it is based on Java, so is compatible with Linux, Windows and MacOS X (as well as any OS with a JVM). It also has a free license for personal use.
+
+  %li
+    %p
+      If you don't have one yet, generate your SSH key (DSA or RSA, we use the first one as example).
+
+    .bash
+      %pre 
+        ssh-keygen -t dsa
+
+  %li
+    %p
+      %a{:title=>"Add new SSH key", :href=>"https://agostini.tlmat.unican.es/keys/new"} Add
+      the content of your public key (probably in ~/.ssh folder). You can add as many keys as you want for different machines or even use the same one for all of them.
+
+  %li
+    %p
+      %b OPTIONAL.
+      If you want, you can add an avatar (an image) to your account and it will be used across this site instead of the generic auto-generated one. In order to do so, you need to 
+      %a{:title=>"Gravatar - Globally Recognized Avatars", :href=>"https://es.gravatar.com/"} create an account in Gravatar
+      and associate the avatar with your email address.
