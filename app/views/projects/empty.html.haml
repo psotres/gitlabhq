@@ -9,7 +9,6 @@
         git config --global user.email "#{current_user.email}"
   
   %br
-  %br
   %fieldset
     %legend Upload already existing local git repository
     %pre.dark
@@ -33,7 +32,6 @@
         git push -u git-tlmat --tags
   
   %br
-  %br
   %fieldset
     %legend Create new repository from previous existing non git folder
     %pre.dark
@@ -56,7 +54,6 @@
         git remote add git-tlmat #{@project.url_to_repo}
         git push -u git-tlmat --all
 
-  %br
   %br
   %fieldset
     %legend Create new repository from scratch
