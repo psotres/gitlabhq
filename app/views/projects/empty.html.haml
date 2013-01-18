@@ -2,33 +2,87 @@
 
 %div.git-empty
   %fieldset
-    %legend Git global setup:
+    %legend Git global user setup (only if not done before)
     %pre.dark
       = preserve do
         git config --global user.name "#{current_user.name}"
         git config --global user.email "#{current_user.email}"
-
+  
+  %br
+  %br
   %fieldset
-    %legend Create Repository
+    %legend Upload already existing local git repository
+    %pre.dark
+      = preserve do
+        cd existing_git_repo
+        git flow init # when asked for branch prefixes, just hit enter some times and use the default ones
+    If needed create and/or modify README.md and .gitignore:
+    %ul
+      %li The content of README.md will be treated as Markdown language and parsed in the project's file tab view.
+      %li .gitignore contains the files that won't be tracked by git in the repository, such as compilation temporary files or local log files for example.
+    %pre.dark
+      = preserve do
+        touch README.md .gitignore
+        git add README.md .gitignore
+        git commit -m "Included README.md and .gitignore files"
+    Upload the files to the remote server
+    %pre.dark
+      = preserve do
+        git remote add git-tlmat #{@project.url_to_repo}
+        git push -u git-tlmat --all
+        git push -u git-tlmat --tags
+  
+  %br
+  %br
+  %fieldset
+    %legend Create new repository from previous existing non git folder
+    %pre.dark
+      = preserve do
+        cd #{@project.path}
+        git flow init # when asked for branch prefixes, just hit enter some times and use the default ones
+    Create and/or modify README.md and .gitignore (heavily recommended):
+    %ul
+      %li The content of README.md will be treated as Markdown language and parsed in the project's file tab view.
+      %li .gitignore contains the files that won't be tracked by git in the repository, such as compilation temporary files or local log files for example.
+    %pre.dark
+      = preserve do
+        touch README.md .gitignore
+        vi .gitignore # add all needed exceptions
+        git add .
+        git commit -m "Initial commit"
+    Upload the files to the remote server
+    %pre.dark
+      = preserve do
+        git remote add git-tlmat #{@project.url_to_repo}
+        git push -u git-tlmat --all
+
+  %br
+  %br
+  %fieldset
+    %legend Create new repository from scratch
     %pre.dark
       = preserve do
         mkdir #{@project.path}
         cd #{@project.path}
-        git init
-        touch README
-        git add README
-        git commit -m 'first commit'
-        git remote add origin #{@project.url_to_repo}
-        git push -u origin master
-
-  %fieldset
-    %legend Existing Git Repo?
+        git flow init # when asked for branch prefixes, just hit enter some times and use the default ones
+    Create  README.md and .gitignore (heavily recommended):
+    %ul
+      %li The content of README.md will be treated as Markdown language and parsed in the project's file tab view.
+      %li .gitignore contains the files that won't be tracked by git in the repository, such as compilation temporary files or local log files for example.
     %pre.dark
       = preserve do
-        cd existing_git_repo
-        git remote add origin #{@project.url_to_repo}
-        git push -u origin master
+        touch README.md .gitignore
+        vi README.md # add project name and a little description
+        vi .gitignore # add all needed exceptions
+        git add README.md .gitignore
+        git commit -m "Initial commit"
+    Upload the files to the remote server
+    %pre.dark
+      = preserve do
+        git remote add git-tlmat #{@project.url_to_repo}
+        git push -u git-tlmat --all
 
+  
   - if can? current_user, :remove_project, @project
     .prepend-top-20
       = link_to 'Remove project', @project, confirm: 'Are you sure?', method: :delete, class: "btn danger right"
