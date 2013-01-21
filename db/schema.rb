@@ -152,7 +152,7 @@ ActiveRecord::Schema.define(:version => 20130102143055) do
     t.string   "default_branch"
     t.boolean  "issues_enabled",         :default => true, :null => false
     t.boolean  "wall_enabled",           :default => true, :null => false
-    t.boolean  "merge_requests_enabled", :default => true, :null => false
+    t.boolean  "merge_requests_enabled", :default => false, :null => false
     t.boolean  "wiki_enabled",           :default => true, :null => false
     t.integer  "namespace_id"
   end
