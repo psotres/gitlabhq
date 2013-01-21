@@ -26,7 +26,7 @@ class Project < ActiveRecord::Base
   class TransferError < StandardError; end
 
   attr_accessible :name, :path, :description, :default_branch, :issues_enabled,
-                  :wall_enabled, :merge_requests_enabled, :wiki_enabled, as: [:default, :admin]
+                  :wall_enabled, :merge_requests_enabled, :wiki_enabled, :public, as: [:default, :admin]
 
   attr_accessible :namespace_id, :creator_id, as: :admin
 
@@ -81,8 +81,21 @@ class Project < ActiveRecord::Base
   scope :sorted_by_activity, ->() { order("(SELECT max(events.created_at) FROM events WHERE events.project_id = projects.id) DESC") }
   scope :personal, ->(user) { where(namespace_id: user.namespace_id) }
   scope :joined, ->(user) { where("namespace_id != ?", user.namespace_id) }
+  scope :public, where(public: true)
 
   class << self
+    def abandoned
+      project_ids = Event.select('max(created_at) as latest_date, project_id').
+        group('project_id').
+        having('latest_date < ?', 6.months.ago).map(&:project_id)
+
+      where(id: project_ids)
+    end
+
+    def with_push
+      includes(:events).where('events.action = ?', Event::Pushed)
+    end
+
     def active
       joins(:issues, :notes, :merge_requests).order("issues.created_at, notes.created_at, merge_requests.created_at DESC")
     end
@@ -101,55 +114,6 @@ class Project < ActiveRecord::Base
       else
         where(path: id, namespace_id: nil).last
       end
-    end
-
-    def create_by_user(params, user)
-      namespace_id = params.delete(:namespace_id)
-
-      project = Project.new params
-
-      Project.transaction do
-
-        # Parametrize path for project
-        #
-        # Ex.
-        #  'GitLab HQ'.parameterize => "gitlab-hq"
-        #
-        project.path = project.name.dup.parameterize
-
-        project.creator = user
-
-        # Apply namespace if user has access to it
-        # else fallback to user namespace
-        if namespace_id != Namespace.global_id
-          project.namespace_id = user.namespace_id
-
-          if namespace_id
-            group = Group.find_by_id(namespace_id)
-            if user.can? :manage_group, group
-              project.namespace_id = namespace_id
-            end
-          end
-        end
-
-        project.save!
-
-        # Add user as project master
-        project.users_projects.create!(project_access: UsersProject::MASTER, user: user)
-
-        # when project saved no team member exist so
-        # project repository should be updated after first user add
-        project.update_repository
-      end
-
-      project
-    rescue Gitlab::Gitolite::AccessDenied => ex
-      project.error_code = :gitolite
-      project
-    rescue => ex
-      project.error_code = :db
-      project.errors.add(:base, "Can't save project. Please try again later")
-      project
     end
 
     def access_options
@@ -251,7 +215,7 @@ class Project < ActiveRecord::Base
 
   def send_move_instructions
     self.users_projects.each do |member|
-      Notify.project_was_moved_email(member.id).deliver
+      Notify.delay.project_was_moved_email(member.id)
     end
   end
 

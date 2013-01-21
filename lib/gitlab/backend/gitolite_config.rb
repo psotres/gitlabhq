@@ -6,6 +6,7 @@ module Gitlab
   class GitoliteConfig
     class PullError < StandardError; end
     class PushError < StandardError; end
+    class BrokenGitolite < StandardError; end
 
     attr_reader :config_tmp_dir, :ga_repo, :conf
 
@@ -70,6 +71,10 @@ module Gitlab
 
     rescue PushError => ex
       log("Push error ->  " + " " + ex.message)
+      raise Gitolite::AccessDenied, ex.message
+
+    rescue BrokenGitolite => ex
+      log("Gitolite error ->  " + " " + ex.message)
       raise Gitolite::AccessDenied, ex.message
 
     rescue Exception => ex
@@ -197,16 +202,40 @@ module Gitlab
     end
 
     def push tmp_dir
-      Dir.chdir(File.join(tmp_dir, "gitolite"))
-      raise "Git add failed." unless system('git add -A')
-      system('git commit -m "GitLab"') # git commit returns 0 on success, and 1 if there is nothing to commit
-      raise "Git commit failed." unless [0,1].include? $?.exitstatus
+      output, status = popen('git add -A')
+      raise "Git add failed." unless status.zero?
 
-      if system('git push')
-        Dir.chdir(Rails.root)
+      # git commit returns 0 on success, and 1 if there is nothing to commit
+      output, status = popen('git commit -m "GitLab"')
+      raise "Git add failed." unless [0,1].include?(status)
+
+      output, status = popen('git push')
+
+      if output =~ /remote\: FATAL/
+        raise BrokenGitolite, output
+      end
+
+      if status.zero? || output =~ /Everything up\-to\-date/
+        return true
       else
         raise PushError, "unable to push gitolite-admin repo"
       end
+    end
+
+    def popen(cmd)
+      path = File.join(config_tmp_dir,'gitolite')
+      vars = { "PWD" => path }
+      options = { :chdir => path }
+
+      @cmd_output = ""
+      @cmd_status = 0
+      Open3.popen3(vars, cmd, options) do |stdin, stdout, stderr, wait_thr|
+        @cmd_status = wait_thr.value.exitstatus
+        @cmd_output << stdout.read
+        @cmd_output << stderr.read
+      end
+
+      return @cmd_output, @cmd_status
     end
   end
 end

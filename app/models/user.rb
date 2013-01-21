@@ -35,7 +35,7 @@
 
 class User < ActiveRecord::Base
   devise :database_authenticatable, :token_authenticatable, :lockable,
-         :recoverable, :rememberable, :trackable, :validatable, :omniauthable
+         :recoverable, :rememberable, :trackable, :validatable, :omniauthable, :registerable
 
   attr_accessible :email, :password, :password_confirmation, :remember_me, :bio, :name, :username,
                   :skype, :linkedin, :twitter, :dark_scheme, :theme_id, :force_random_password,
@@ -152,11 +152,8 @@ class User < ActiveRecord::Base
     namespaces << self.namespace if self.namespace
 
     # Add groups you can manage
-    namespaces += if admin
-                    Group.all
-                  else
-                    groups.all
-                  end
+    namespaces += groups.all
+
     namespaces
   end
 
@@ -194,9 +191,9 @@ class User < ActiveRecord::Base
                   namespaces: namespaces.map(&:id), user_id: self.id)
   end
 
-  # Team membership in personal projects
-  def tm_in_personal_projects
-    UsersProject.where(project_id:  personal_projects.map(&:id), user_id: self.id)
+  # Team membership in authorized projects
+  def tm_in_authorized_projects
+    UsersProject.where(project_id:  authorized_projects.map(&:id), user_id: self.id)
   end
 
   # Returns a string for use as a Gitolite user identifier
@@ -232,6 +229,10 @@ class User < ActiveRecord::Base
                      abilities << Ability
                      abilities
                    end
+  end
+
+  def can_select_namespace?
+    several_namespaces? || admin
   end
 
   def can? action, subject

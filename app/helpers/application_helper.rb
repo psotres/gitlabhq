@@ -39,16 +39,8 @@ module ApplicationHelper
     else
       gravatar_url = request.ssl? ? Gitlab.config.gravatar.ssl_url : Gitlab.config.gravatar.plain_url
       user_email.strip!
-      sprintf(gravatar_url, {:hash => Digest::MD5.hexdigest(user_email.downcase), :email => URI.escape(user_email), :size => size})
+      sprintf gravatar_url, hash: Digest::MD5.hexdigest(user_email.downcase), size: size
     end
-  end
-
-  def request_protocol
-    request.ssl? ? "https" : "http"
-  end
-
-  def web_app_url
-    "#{request_protocol}://#{Gitlab.config.gitlab.host}/"
   end
 
   def last_commit(project)
@@ -91,17 +83,18 @@ module ApplicationHelper
     ]
 
     help_nav = [
-      { label: "Environment Configuration", url: help_configuration_path },
-	  { label: "Windows 7", url: help_windows_conf_path },
-	  { label: "Linux (using Ubuntu 12.04 as example)", url: help_linux_conf_path },
-	  { label: "Workflow Help", url: help_workflow_path },
-      { label: "Permissions Help", url: help_permissions_path },
-      { label: "Web Hooks Help", url: help_web_hooks_path },
-      { label: "System Hooks Help", url: help_system_hooks_path },
       { label: "API Help", url: help_api_path },
       { label: "Markdown Help", url: help_markdown_path },
+      { label: "Permissions Help", url: help_permissions_path },
+      { label: "Public Access Help", url: help_public_access_path },
+      { label: "Rake Tasks Help", url: help_raketasks_path },
       { label: "SSH Keys Help", url: help_ssh_path },
-      { label: "Gitlab Rake Tasks Help", url: help_raketasks_path },
+      { label: "System Hooks Help", url: help_system_hooks_path },
+      { label: "Web Hooks Help", url: help_web_hooks_path },
+      { label: "Workflow Help", url: help_workflow_path },
+      { label: "Environment Configuration", url: help_configuration_path },
+	  { label: "Windows 7", url: help_windows_conf_path },
+	  { label: "Linux (using Ubuntu 12.04 as example)", url: help_linux_conf_path
     ]
 
     project_nav = []
@@ -167,4 +160,9 @@ module ApplicationHelper
     image_tag("authbuttons/#{file_name}",
               alt: "Sign in with #{provider.to_s.titleize}")
   end
+
+  def image_url(source)
+    root_url + path_to_image(source)
+  end
+  alias_method :url_to_image, :image_url
 end

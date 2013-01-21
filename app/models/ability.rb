@@ -7,7 +7,7 @@ class Ability
       when "Note" then note_abilities(object, subject)
       when "Snippet" then snippet_abilities(object, subject)
       when "MergeRequest" then merge_request_abilities(object, subject)
-      when "Group" then group_abilities(object, subject)
+      when "Group", "Namespace" then group_abilities(object, subject)
       else []
       end
     end
@@ -57,13 +57,13 @@ class Ability
     def project_report_rules
       project_guest_rules + [
         :download_code,
-        :write_merge_request,
         :write_snippet
       ]
     end
 
     def project_dev_rules
       project_report_rules + [
+        :write_merge_request,
         :write_wiki,
         :push_code
       ]
@@ -90,6 +90,7 @@ class Ability
     def project_admin_rules
       project_master_rules + [
         :change_namespace,
+        :change_public_mode,
         :rename_project,
         :remove_project
       ]
@@ -101,7 +102,8 @@ class Ability
       # Only group owner and administrators can manage group
       if group.owner == user || user.admin?
         rules << [
-          :manage_group
+          :manage_group,
+          :manage_namespace
         ]
       end
 

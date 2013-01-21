@@ -1,3 +1,5 @@
+require 'sidekiq/web'
+
 Gitlab::Application.routes.draw do
   #
   # Search
@@ -8,9 +10,10 @@ Gitlab::Application.routes.draw do
   require 'api'
   mount Gitlab::API => '/api'
 
-  # Optionally, enable Resque here
-  require 'resque/server'
-  mount Resque::Server => '/info/resque', as: 'resque'
+  constraint = lambda { |request| request.env["warden"].authenticate? and request.env['warden'].user.admin? }
+  constraints constraint do
+    mount Sidekiq::Web, at: "/admin/sidekiq", as: :sidekiq
+  end
 
   # Enable Grack support
   mount Grack::Bundle.new({
@@ -23,18 +26,27 @@ Gitlab::Application.routes.draw do
   #
   # Help
   #
-  get 'help'              => 'help#index'
-  get 'help/permissions'  => 'help#permissions'
-  get 'help/workflow'     => 'help#workflow'
-  get 'help/api'          => 'help#api'
-  get 'help/web_hooks'    => 'help#web_hooks'
-  get 'help/system_hooks' => 'help#system_hooks'
-  get 'help/markdown'     => 'help#markdown'
-  get 'help/ssh'          => 'help#ssh'
-  get 'help/raketasks'    => 'help#raketasks'
+  get 'help'                => 'help#index'
+  get 'help/api'            => 'help#api'
+  get 'help/markdown'       => 'help#markdown'
+  get 'help/permissions'    => 'help#permissions'
+  get 'help/public_access'  => 'help#public_access'
+  get 'help/raketasks'      => 'help#raketasks'
+  get 'help/ssh'            => 'help#ssh'
+  get 'help/system_hooks'   => 'help#system_hooks'
+  get 'help/web_hooks'      => 'help#web_hooks'
+  get 'help/workflow'       => 'help#workflow'
   get 'help/configuration' => 'help#configuration'
   get 'help/windows_conf' => 'help#windows_conf'
   get 'help/linux_conf' => 'help#linux_conf'
+
+  #
+  # Public namespace
+  #
+  namespace :public do
+    resources :projects, only: [:index]
+    root to: "projects#index"
+  end
 
   #
   # Admin Area
@@ -112,7 +124,7 @@ Gitlab::Application.routes.draw do
 
   resources :projects, constraints: { id: /[^\/]+/ }, only: [:new, :create]
 
-  devise_for :users, controllers: { omniauth_callbacks: :omniauth_callbacks }
+  devise_for :users, controllers: { omniauth_callbacks: :omniauth_callbacks, registrations: :registrations }
 
   #
   # Project Area
