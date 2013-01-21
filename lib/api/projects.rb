@@ -32,7 +32,7 @@ module Gitlab
       #   issues_enabled (optional) - enabled by default
       #   wall_enabled (optional) - enabled by default
       #   merge_requests_enabled (optional) - enabled by default
-      #   wiki_enabled (optional) - enabled by default
+      #   wiki_enabled (optional) - disabled by default
       # Example Request
       #   POST /projects
       post do

@@ -13,7 +13,7 @@
 #  default_branch         :string(255)
 #  issues_enabled         :boolean          default(TRUE), not null
 #  wall_enabled           :boolean          default(TRUE), not null
-#  merge_requests_enabled :boolean          default(TRUE), not null
+#  merge_requests_enabled :boolean          default(FALSE), not null
 #  wiki_enabled           :boolean          default(TRUE), not null
 #  namespace_id           :integer
 #

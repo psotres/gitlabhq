@@ -101,7 +101,7 @@ Parameters:
 + `default_branch` (optional) - 'master' by default
 + `issues_enabled` (optional) - enabled by default
 + `wall_enabled` (optional) - enabled by default
-+ `merge_requests_enabled` (optional) - enabled by default
++ `merge_requests_enabled` (optional) - disabled by default
 + `wiki_enabled` (optional) - enabled by default
 
 Will return created project with status `201 Created` on success, or `404 Not
