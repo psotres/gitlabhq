@@ -32,6 +32,9 @@ Gitlab::Application.routes.draw do
   get 'help/markdown'     => 'help#markdown'
   get 'help/ssh'          => 'help#ssh'
   get 'help/raketasks'    => 'help#raketasks'
+  get 'help/configuration' => 'help#configuration'
+  get 'help/windows_conf' => 'help#windows_conf'
+  get 'help/linux_conf' => 'help#linux_conf'
 
   #
   # Admin Area

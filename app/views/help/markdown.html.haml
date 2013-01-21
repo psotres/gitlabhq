@@ -59,7 +59,26 @@
     %p
       GFM will autolink standard URLs you copy and paste into your text.
       So if you want to link to a URL (instead of a textual link), you can simply put the URL in verbatim and it will be turned into a link to that URL.
+	
+    %h4 Tables
 
+.row
+  .span8
+    %p
+      GFM will generate tables if you use PHP-Markdown Extra like syntax:
+    %pre= %Q{First Header   | Second Header\n---------------|---------------\nContent Cell 1 | Content Cell 2\nContent Cell 3 | Content Cell 4\nContent Cell 5 | Content Cell 6}
+    %p becomes
+    = markdown %Q{First Header   | Second Header\n---------------|---------------\nContent Cell 1 | Content Cell 2\nContent Cell 3 | Content Cell 4\nContent Cell 5 | Content Cell 6}
+
+  .span4
+    .alert.alert-info
+      %p
+        Consult the
+        %strong= link_to "PHP-Markdown Extra Tables", "http://michelf.ca/projects/php-markdown/extra/#table"
+        for more details.
+
+.row
+  .span8
     %h4 Fenced code blocks
 
     %p

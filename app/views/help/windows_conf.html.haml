@@ -1,0 +1,108 @@
+- bash_lexer = Pygments::Lexer[:bash]
+%h3 Windows 7 Installation/Configuration
+%hr
+
+%ol.help
+  %li
+    %p
+      Download last version of
+      %a{:href=>"https://git-scm.com/"} Git for Windows
+      and install it
+
+  %li
+    %p
+      Install git-flow and git-flow-completion by extracting the content of
+      %a{:title=>"git-flow v0.4.1", :href=>"https://agostini.tlmat.unican.es/uploads/gitflow-v0.4.1-win7.zip"} this file
+      to your git installation folder. Then add to your .bashrc file inside your user folder
+
+    .bash
+      %pre 
+        source /local/etc/git-flow-completion.bash
+        
+  %li
+    %p
+      %b RECOMMENDED.
+      If you want, you can use
+      %a{:title=>"Console", :href=>"http://sourceforge.net/projects/console/"} Console2
+      as a frontend for Git Bash. This will give you some advantages over it, like tabs for example. In order to configure this, you will need to add a "git tab" in settings including these options
+      .bash
+      %pre 
+        Shell: C:\Program Files (x86)\Git\bin\sh.exe --login -i
+        Startup dir: %HOMEDRIVE%%HOMEPATH%
+    %p  
+      Then you can create a shortcut to start Console2 with the git shell by adding setting destination parameter to
+      .bash
+      %pre 
+        "C:\Program Files\Console2\Console.exe" -t Git
+
+  %li
+    %p
+      From now on, you will use Git Bash (or Console2 if you installed it) to enter any of the next commands
+      
+  %li
+    %p
+      Configure your git environment user data
+    
+    .bash
+      %pre 
+        - setup_str = ["git config --global user.name \"#{current_user.name}\"", "git config --global user.email \"#{current_user.email}\""].join("\n")
+        #{setup_str}
+
+  %li
+    %p
+      %b OPTIONAL.
+      Add some alias to the most used commands
+    
+    .bash
+      %pre 
+        git config --global alias.st status
+        git config --global alias.co checkout
+        git config --global alias.br branch
+        git config --global alias.ci commit
+
+  %li
+    %p
+      %b RECOMMENDED.
+      When you are working with git using the terminal, it's very useful to know in which branch you really are. Add the content of
+      %a{:title=>".bashrc example file", :href=>"https://agostini.tlmat.unican.es/uploads/.bashrc"} this file
+      to your .bashrc file inside your user folder. This will also change the colors of your prompt, so if you are unhappy with them feel free to modify anything.
+
+  %li
+    %p
+      %b OPTIONAL.
+      Set the default editor for git (in this case Vim)
+    
+    .bash
+      %pre 
+        git config --global core.editor vim
+
+  %li
+    %p
+      %b RECOMMENDED.
+      If you want, you can install a GUI for managing a repository, and there are plenty of them for Windows, as well as for Linux and MacOS X. Our recomendation is to use
+      %a{:title=>"Git Client - SmartGit", :href=>"http://www.syntevo.com/smartgit/index.html"} SmartGit
+      client. Its main advantage is that it is based on Java, so is compatible with Windows, Linux and MacOS X (as well as any OS with a JVM). It also has a free license for personal use.
+
+  %li
+    %p
+      If you don't have one yet, generate your SSH key (DSA or RSA, we use the first one as example).
+
+    .bash
+      %pre 
+        ssh-keygen -t dsa
+
+  %li
+    %p
+      %a{:title=>"Add new SSH key", :href=>"https://agostini.tlmat.unican.es/keys/new"} Add
+      the content of your public key (probably in your .ssh folder inside your user folder). You can add as many keys as you want for different machines or even use the same one for all of them.
+
+  %li
+    %p
+      %b OPTIONAL.
+      If you want, you can add an avatar (an image) to your account and it will be used across this site instead of the generic auto-generated one. In order to do so, you need to 
+      %a{:title=>"Gravatar - Globally Recognized Avatars", :href=>"https://es.gravatar.com/"} create an account in Gravatar
+      and associate the avatar with your email address.
+
+
+
+
