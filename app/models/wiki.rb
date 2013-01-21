@@ -47,6 +47,21 @@ class Wiki < ActiveRecord::Base
     new_wiki
   end
 
+  # Scope with last revisions of pages (i.e. newest page per project_id
+  # and slug).
+  #
+  # This is instead of Wiki.group(:slug).order(:created_at) which in this
+  # case generates query violating SQL standard (thus doesn't work on PgSQL).
+  #
+  # return:
+  #   ActiveRecord::Relation
+  #
+  def last_revisions
+    t1 = arel_table.alias(table_name + '1')
+    where(created_at: from(t1).select(t1[:created_at].maximum)
+                              .where(project_id: t1[:project_id], slug: t1[:slug]))
+  end
+
   def set_slug
     self.slug = self.title.parameterize
   end
