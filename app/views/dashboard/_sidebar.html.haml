@@ -2,9 +2,13 @@
   = render "groups", groups: @groups
 = render "projects", projects: @projects
 %div
+  %p
+  %a{:href => "http://www.tlmat.unican.es"}
+    %img{:alt => "GIT logo", :src => "http://www.tlmat.unican.es/images/logoGIT_text_es.jpg"}
+  %hr
   %span.rss-icon
     = link_to dashboard_path(:atom, { private_token: current_user.private_token }) do
       = image_tag "rss_ui.png", title: "feed"
       %strong News Feed
 
-%hr
+  %hr
