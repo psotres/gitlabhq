@@ -19,8 +19,8 @@
   %li
     %p
       Install git-flow and git-flow-completion by extracting the content of
-      %a{:title=>"git-flow v0.4.1", :href=>"https://agostini.tlmat.unican.es/uploads/gitflow-v0.4.1-win7.zip"} this file
-      to your git installation folder. Then add to your .bashrc file inside your user folder
+      %a{:title=>"git-flow v0.4.1", :href=>"https://git.tlmat-unican.es/help/gitflow-0.4.2-pre.win7.zip"} this file
+      to your git installation folder. Then add to your .bashrc file inside your user folder (create it if it doesn't exist)
 
     .bash
       %pre 
@@ -71,7 +71,7 @@
     %p
       %b RECOMMENDED.
       When you are working with git using the terminal, it's very useful to know in which branch you really are. Add the content of
-      %a{:title=>".bashrc example file", :href=>"https://agostini.tlmat.unican.es/uploads/.bashrc"} this file
+      %a{:title=>".bashrc example file", :href=>"https://git.tlmat-unican.es/help/.bashrc"} this file
       to your .bashrc file inside your user folder. This will also change the colors of your prompt, so if you are unhappy with them feel free to modify anything.
 
   %li
@@ -92,7 +92,9 @@
 
   %li
     %p
-      If you don't have one yet, generate your SSH key (DSA or RSA, we use the first one as example).
+      You can either use SSH or HTTPS protocols to access to the repository. By using HTTPS the server will ask for your user and pass each time you want to download or upload
+      code from/to the repository. On the other hand, using SSH implies the need of a valid SSH public key, but it gives you a direct access to the git repository.
+      The recommendation is to use SSH, so if you don't have one yet, generate your SSH key (DSA or RSA, we use the first one as example).
 
     .bash
       %pre 
@@ -100,7 +102,7 @@
 
   %li
     %p
-      %a{:title=>"Add new SSH key", :href=>"https://agostini.tlmat.unican.es/keys/new"} Add
+      %a{:title=>"Add new SSH key", :href=>"https://git.tlmat-unican.es/keys/new"} Add
       the content of your public key (probably in your .ssh folder inside your user folder). You can add as many keys as you want for different machines or even use the same one for all of them.
 
   %li
@@ -109,7 +111,3 @@
       If you want, you can add an avatar (an image) to your account and it will be used across this site instead of the generic auto-generated one. In order to do so, you need to 
       %a{:title=>"Gravatar - Globally Recognized Avatars", :href=>"https://es.gravatar.com/"} create an account in Gravatar
       and associate the avatar with your email address.
-
-
-
-
