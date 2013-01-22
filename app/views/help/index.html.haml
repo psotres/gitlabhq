@@ -4,9 +4,6 @@
     %span= Gitlab::Version
     %small= Gitlab::Revision
 
-    %p
-        %a{:href => "http://www.tlmat.unican.es"}
-        %img{:alt => "GIT logo", :src => "http://www.tlmat.unican.es/images/logoGIT_text_es.jpg"}  
 %hr
 %p.lead
   Self Hosted Git Management
@@ -16,24 +13,6 @@
 %br
 
 .row
-  .span4
-    .ui-box
-      .title
-        %h5 Quick help
-      %ul.well-list
-        %li
-          Email your
-          = mail_to Gitlab.config.gitlab.support_email, "support contact"
-        %li
-          Use the
-          = link_to "search bar", '#', onclick: "$("#search").focus();"
-          on the top of this page
-        %li
-          Ask in our
-          = link_to "support forum", "https://groups.google.com/forum/#!forum/gitlabhq"
-        %li
-          Browse our
-          = link_to "issue tracker", "https://github.com/gitlabhq/gitlabhq/issues"
   .span4
     .ui-box
       .title
@@ -84,3 +63,20 @@
         %li
           %strong= link_to "Public Access", help_public_access_path
           %p Learn how you can allow public access to a project.
+
+  .span4
+    .ui-box
+      .title
+        %h5 Quick help
+      %ul.well-list
+        %li
+          Email your
+          = mail_to Gitlab.config.gitlab.support_email, "support contact"
+        %li
+          Use the
+          = link_to "search bar", '#', onclick: "$("#search").focus();"
+          on the top of this page
+    .right
+      %p
+        %a{:href => "http://www.tlmat.unican.es"}
+        %img{:alt => "GIT logo", :src => "https://agostini.tlmat-unican.es/static/images/logoGIT_text_es.png"}
