@@ -94,8 +94,6 @@ module ApplicationHelper
       { label: "help: Web Hooks Help", url: help_web_hooks_path },
       { label: "help: Workflow Help", url: help_workflow_path },
       { label: "help: Environment Configuration", url: help_configuration_path },
-      { label: "help: Windows 7", url: help_windows_conf_path },
-      { label: "help: Linux (using Ubuntu 12.04 as example)", url: help_linux_conf_path}
     ]
 
     project_nav = []

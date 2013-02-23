@@ -36,9 +36,7 @@ Gitlab::Application.routes.draw do
   get 'help/system_hooks'   => 'help#system_hooks'
   get 'help/web_hooks'      => 'help#web_hooks'
   get 'help/workflow'       => 'help#workflow'
-  get 'help/configuration' => 'help#configuration'
-  get 'help/windows_conf' => 'help#windows_conf'
-  get 'help/linux_conf' => 'help#linux_conf'
+  get 'help/configuration'  => 'help#configuration'
 
   #
   # Public namespace

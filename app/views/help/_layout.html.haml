@@ -5,7 +5,11 @@
         %h5 Help
       %ul.well-list
         %li
+          %strong= link_to "Environment Configuration", help_configuration_path
+          
+        %li
           %strong= link_to "Workflow", help_workflow_path
+
         %li
           %strong= link_to "SSH keys", help_ssh_path
 
@@ -29,6 +33,10 @@
 
         %li
           %strong= link_to "Public Access", help_public_access_path
+
+  %p
+      %a{:href => "http://www.tlmat.unican.es"}
+        %img{:alt => "GIT logo", :src => "https://agostini.tlmat-unican.es/static/images/logoGIT_text_es.png"}
 
   .span9.pull-right
     = yield
