@@ -86,11 +86,7 @@ Gitlab::Application.routes.draw do
     resource :logs, only: [:show]
     resource :resque, controller: 'resque', only: [:show]
 
-    resources :projects, constraints: { id: /[a-zA-Z.\/0-9_\-]+/ }, except: [:new, :create] do
-      member do
-        get :team
-        put :team_update
-      end
+    resources :projects, constraints: { id: /[a-zA-Z.\/0-9_\-]+/ }, only: [:index, :show] do
       scope module: :projects, constraints: { id: /[a-zA-Z.\/0-9_\-]+/ } do
         resources :members, only: [:edit, :update, :destroy]
       end
@@ -115,6 +111,8 @@ Gitlab::Application.routes.draw do
       put :reset_private_token
       put :update_username
     end
+
+    resource :notifications
   end
 
   resources :keys
@@ -168,8 +166,14 @@ Gitlab::Application.routes.draw do
   # Project Area
   #
   resources :projects, constraints: { id: /(?:[a-zA-Z.0-9_\-]+\/)?[a-zA-Z.0-9_\-]+/ }, except: [:new, :create, :index], path: "/" do
+    member do
+      put :transfer
+    end
+
     resources :blob,    only: [:show], constraints: {id: /.+/}
-    resources :tree,    only: [:show, :edit, :update], constraints: {id: /.+/}
+    resources :raw,    only: [:show], constraints: {id: /.+/}
+    resources :tree,    only: [:show], constraints: {id: /.+/, format: /(html|js)/ }
+    resources :edit_tree,    only: [:show, :update], constraints: {id: /.+/}, path: 'edit'
     resources :commit,  only: [:show], constraints: {id: /[[:alnum:]]{6,40}/}
     resources :commits, only: [:show], constraints: {id: /(?:[^.]|\.(?!atom$))+/, format: /atom/}
     resources :compare, only: [:index, :create]
@@ -263,13 +267,11 @@ Gitlab::Application.routes.draw do
     resources :labels, only: [:index]
     resources :issues, except: [:destroy] do
       collection do
-        post  :sort
         post  :bulk_update
-        get   :search
       end
     end
 
-    resources :team_members do
+    resources :team_members, except: [:index, :edit] do
       collection do
 
         # Used for import team
