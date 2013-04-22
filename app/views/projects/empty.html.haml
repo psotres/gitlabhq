@@ -4,7 +4,7 @@
   %fieldset
     %legend Git global user setup (only if not done before)
     %pre.dark
-      = preserve do
+      :preserve
         git config --global user.name "#{current_user.name}"
         git config --global user.email "#{current_user.email}"
   
@@ -35,7 +35,7 @@
   %fieldset
     %legend Create new repository from previous existing non git folder
     %pre.dark
-      = preserve do
+      = preserve
         cd #{@project.path}
         git flow init # when asked for branch prefixes, just hit enter some times and use the default ones
     Create and/or modify README.md and .gitignore (heavily recommended):
@@ -43,7 +43,7 @@
       %li The content of README.md will be treated as Markdown language and parsed in the project's file tab view.
       %li .gitignore contains the files that won't be tracked by git in the repository, such as compilation temporary files or local log files for example.
     %pre.dark
-      = preserve do
+      = preserve
         touch README.md .gitignore
         vi .gitignore # add all needed exceptions
         git add .
@@ -58,7 +58,7 @@
   %fieldset
     %legend Create new repository from scratch
     %pre.dark
-      = preserve do
+      = preserve
         mkdir #{@project.path}
         cd #{@project.path}
         git flow init # when asked for branch prefixes, just hit enter some times and use the default ones
