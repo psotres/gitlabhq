@@ -7,11 +7,11 @@
     = link_to 'Teams', '#teams', 'data-toggle' => 'tab', id: 'sidebar-teams-tab'
 
 .tab-content
-  .tab-pane.active#projects
+  .tab-pane#projects
     = render "projects", projects: @projects
   .tab-pane#groups
     = render "groups", groups: @groups
-  .tab-pane#teams
+  .tab-pane.active#teams
     = render "teams", teams: @teams
 
 .prepend-top-20
